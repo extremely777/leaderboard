@@ -1,0 +1,268 @@
+/* ============ Theme tokens (Binance-ish) ============ */
+:root{
+  --bg:#ffffff;
+  --panel:#ffffff;
+  --card:#FAFBFC;
+  --text:#1E2329;
+  --muted:#6C7280;
+  --border:#E6E8EA;
+
+  --green:#25C26E;   /* Buy */
+  --green-deep:#118B4B;
+  --red:#F6465D;     /* Sell */
+  --red-deep:#D93D50;
+  --yellow:#F0B90B;  /* accent */
+
+  --shadow:0 8px 20px rgba(0,0,0,.06);
+  --radius:12px;
+}
+
+html,body{height:100%}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,'Noto Sans KR','Apple SD Gothic Neo',Roboto,'Segoe UI',Arial,sans-serif;
+  letter-spacing:-.2px;
+}
+
+.container{max-width:1200px;margin:0 auto;padding:0 16px}
+
+h1, h2{
+  margin-top:16px;
+  margin-bottom:28px;        /* 타이틀과 본문 간격 */
+  color:#0B1426;
+  letter-spacing:-.3px;
+}
+
+/* ========== 오늘의 목표 (도넛) ========== */
+.goal-box{ margin-bottom: 8px; }
+
+.goals-grid{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:56px;margin-top:10px;
+}
+
+.goal-doughnut{
+  display:flex;flex-direction:column;align-items:center;position:relative;width:140px;
+  transition:transform .25s ease, filter .25s ease;
+  cursor:pointer;
+}
+.goal-doughnut:hover{ transform:scale(1.08); filter:brightness(1.06); }
+
+.chart-wrapper{ position:relative; width:96px; height:96px; margin-bottom:10px; }
+.percentage{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#39424C;
+}
+
+.label{ margin-top:2px; font-size:14px; font-weight:700; color:#1E2329; }
+.count{ font-size:13px; color:#5B616E; margin-top:2px; }
+.count .goal-value{ color:var(--red); font-weight:700; }
+.goal-reached{ color:var(--red); font-weight:700; }
+
+/* 시간 범례 */
+.time-range{ font-size:11px; color:#8A9099; text-align:center; margin-top:6px; }
+
+/* ========== 업데이트 시간 ========== */
+.update-time{ margin: 6px 0 8px; font-size:13px; color:#6C7280; }
+
+/* ========== 배달 완료 순위 (표) ========== */
+table.leaderboard{
+  width:100%; border-collapse:separate; border-spacing:0 10px; font-size:14px;
+}
+table.leaderboard thead th{
+  padding:10px 12px; text-align:center; color:#848E9C; font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+table.leaderboard tbody tr td{
+  background:var(--card);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  text-align:center; padding:14px 12px; vertical-align:middle;
+}
+table.leaderboard tbody tr td:first-child{
+  border-left:1px solid var(--border); border-top-left-radius:10px; border-bottom-left-radius:10px;
+}
+table.leaderboard tbody tr td:last-child{
+  border-right:1px solid var(--border); border-top-right-radius:10px; border-bottom-right-radius:10px;
+}
+table.leaderboard tbody tr:hover td{ background:#F4F6F8; }
+
+/* 시간대별 2x2 그리드(표 내부 칸) */
+.time-grid{
+  display:grid; grid-template-columns:1fr 1fr; row-gap:4px; column-gap:16px;
+}
+.time-grid > div{ display:flex; justify-content:space-between; white-space:nowrap; font-size:13px; }
+.time-num{ text-align:right; }
+
+/* 상태 배지 */
+.status{
+  display:inline-flex;align-items:center;justify-content:center;min-width:88px;
+  height:28px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:800;color:#fff;
+}
+.status-running{ background:var(--green); }
+.status-ended{  background:var(--red); }
+
+/* ========== 미션 영역 (카드) ========== */
+.mission-box{ margin-top:14px; padding: 0 0 22px 0; background:transparent; border:none; }
+.mission-duo-container {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 80px;   /* ✅ 간격 넓힘: 28px → 44px (원하면 48~56px도 OK) */
+  flex-wrap: wrap;
+  padding: 0 8px;
+}
+.mission-block{
+  position:relative; background:var(--panel); border:1px solid var(--border); border-radius:20px;
+  padding:24px 28px; max-width:340px; flex:1 1 280px; box-shadow:var(--shadow); text-align:center;
+}
+
+/* 타이틀 */
+.mission-title{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-size:22px; font-weight:900; margin-bottom:4px;
+}
+.mission-title .black-square{ width:12px; height:12px; border-radius:3px; background:#111; }
+
+/* 시간 텍스트 */
+.mission-time{ font-size:16px; color:#6C7280; margin-bottom:14px; }
+
+/* 스테이지 */
+.mission-stages{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:6px; }
+.mission-stage{ text-align:center; font-size:14px; line-height:1.7; color:#222; display:flex; flex-direction:column; gap:6px; }
+.mission-stage strong{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:70px; height:30px; padding:0 10px;
+  background:#ECEFF3; border:1px solid var(--border); border-radius:8px;
+  font-size:13px; font-weight:800; color:#39424C;
+}
+
+/* 반응형 */
+@media (max-width: 860px){
+  .mission-duo-container{ gap:16px; }
+  .mission-block{ padding:20px; }
+  .mission-stages{ gap:16px; grid-template-columns:1fr; }
+  .mission-title{ font-size:20px; }
+}
+
+/* 기타 강조 */
+.goal-red-bold{ color:var(--red); font-weight:700; }
+
+/* =========================
+   미션 카드: Hover 색반전 테마
+   ========================= */
+
+/* 1) 기본 테마 값을 커스텀 프로퍼티로 관리 */
+.mission-block{
+  --card-bg: rgba(255,255,255,0.65);   /* 평소 배경(밝음) */
+  --card-fg: #181818;                  /* 평소 글자색 */
+  --chip-bg: rgba(0,0,0,0.06);         /* 1단계/2단계 배경 */
+  --chip-fg: #333;                     /* 1단계/2단계 글자 */
+  --chip-border: rgba(0,0,0,0.08);     /* 1단계/2단계 테두리 */
+
+  background: var(--card-bg);
+  color: var(--card-fg);
+  transition: background .25s ease, color .25s ease,
+              box-shadow .25s ease, transform .18s ease;
+}
+
+/* 카드 테두리(::before)도 함께 전환 */
+.mission-block::before{
+  transition: background .25s ease;
+}
+
+/* 타이틀/아이콘도 현재 글자색을 따르게 */
+.mission-title{ color: var(--card-fg); }
+.mission-title .black-square{
+  background: currentColor;                  /* 글자색과 동일 */
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.12);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+/* 단계 칩(1단계/2단계)도 변수 기반으로 */
+.mission-stage strong{
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border-color: var(--chip-border);
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+
+/* 서브 텍스트 색 전환(그룹/개인/시간) */
+.mission-time,
+.mission-stage div{
+  color: #666;
+  transition: color .25s ease;
+}
+
+/* 2) Hover 시 다크 테마로 "색 반전" 느낌 주기 */
+.mission-block:hover{
+  --card-bg: #121212;                    /* 어두운 배경 */
+  --card-fg: #ffffff;                    /* 밝은 글자 */
+  --chip-bg: rgba(255,255,255,0.16);     /* 칩도 반전 */
+  --chip-fg: #ffffff;
+  --chip-border: rgba(255,255,255,0.28);
+
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+}
+
+/* 테두리도 흰색으로 반전 */
+.mission-block:hover::before{
+  background: linear-gradient(#ffffff, #ffffff);
+}
+
+/* 서브 텍스트도 밝게 */
+.mission-block:hover .mission-time,
+.mission-block:hover .mission-stage div{
+  color: rgba(255,255,255,0.85);
+}
+
+/* 시간대별 배달: 라벨-숫자 사이만 좁히기 */
+table.leaderboard td.time-col .time-grid {
+  justify-items: center;          /* 각 셀(좌/우)에서 쌍을 가운데 배치 */
+}
+
+table.leaderboard td.time-col .time-grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;    /* space-between 제거 */
+  width: max-content;             /* 내용만큼만 너비 */
+  margin: 0 auto;                 /* 그 상태로 셀 중앙 정렬 */
+  gap: 12px;                       /* ← 라벨-숫자 간격(원하면 4~8px로 조절) */
+}
+
+table.leaderboard td.time-col .time-grid .time-num {
+  text-align: right;              /* 숫자 정렬 유지 */
+}
+
+/* 시간대별 배달: 왼쪽쌍(아점 8) ↔ 오른쪽쌍(오후 17) 사이 간격만 축소 */
+table.leaderboard td.time-col .time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, max-content); /* 1fr 1fr → 내용만큼만 */
+  justify-content: center;                        /* 가운데로 모으기 */
+  column-gap: 20px;                               /* ← 두 쌍 사이 간격 (원하는 값으로 12~28px 조절) */
+  row-gap: 8px;                                   /* 위/아래 줄 간격 */
+}
+
+/* 각 쌍(라벨+숫자)은 내용만큼만, 내부 간격만 유지 */
+table.leaderboard td.time-col .time-grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: max-content;
+  margin: 0 auto;
+  gap: 6px;                                       /* 라벨-숫자 간격(더 붙이려면 4px로) */
+}
+
+/* 시간대별 배달: 우측 여백만 좁히기 */
+table.leaderboard td.time-col {
+  padding-right: 0px;   /* 기본이 8px 정도일 가능성 → 더 줄이고 싶으면 4px */
+}
+
+/* (선택) 좌측은 그대로 두고 싶지 않으면 아래 줄은 건드리지 마세요 */
+table.leaderboard td.time-col {
+  /* padding-left: 8px;  // 필요하면 좌측도 따로 조정 */
+}
+

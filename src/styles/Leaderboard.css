@@ -1,0 +1,24 @@
+/* src/styles/Leaderboard.css */
+
+.container {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}

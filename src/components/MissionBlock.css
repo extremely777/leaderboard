@@ -1,0 +1,75 @@
+/* ✅ 미션 영역 전체 */
+.mission-section {
+  margin-top: 30px;
+  padding: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+/* ✅ 내부 정렬: 시간과 타이틀 좌측, 스택바 우측 */
+.mission-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mission-left {
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+.mission-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.mission-time {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.stack-bar-container {
+  flex-grow: 1;
+}
+
+.stack-bar-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  color: #444;
+}
+
+/* ✅ 1단계 / 2단계를 가로로 배치 */
+.mission-stages {
+  display: flex;
+  justify-content: center;
+  gap: 40px; /* 1단계와 2단계 사이 간격 */
+  margin-top: 10px;
+}
+
+/* ✅ 각 단계 박스 스타일 */
+.mission-stage {
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 120px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ✅ 텍스트 스타일 보완 */
+.mission-stage strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.mission-stage div {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #333;
+}
