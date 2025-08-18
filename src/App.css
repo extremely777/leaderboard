@@ -333,3 +333,65 @@ table.leaderboard td.time-col {
 /* 제목도 반응형 */
 h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); }
 .update-time{ font-size: var(--fs-xxs); }
+
+/* === Mobile: 도넛 5개 한 줄 === */
+@media (max-width: 480px) {
+  .goals-grid{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    justify-items: center;
+  }
+  .goal-doughnut{ width: auto; }
+  .goal-doughnut .chart-wrapper{ width: 56px; height: 56px; margin-bottom: 4px; }
+  .goal-doughnut .percentage{ font-size: 11px; }
+  .goal-doughnut .label{ font-size: 12px; }
+  .goal-doughnut .count{ font-size: 11px; line-height: 1.1; }
+
+  /* 공간 절약 위해 시간대 설명은 모바일에서 숨김 */
+  .goal-doughnut .time-range{ display: none; }
+}
+
+/* 초소형 기기(예: 360px 이하) 보정 */
+@media (max-width: 360px){
+  .goal-doughnut .chart-wrapper{ width: 50px; height: 50px; }
+  .goal-doughnut .label{ font-size: 11px; }
+}
+
+/* 대안: 도넛을 가로 스크롤로 보기 */
+@media (max-width: 480px){
+  .goals-grid{ display: block; white-space: nowrap; overflow-x: auto; padding-bottom: 6px; }
+  .goal-doughnut{ display: inline-flex; width: 120px; margin-right: 12px; }
+}
+
+/* === Mobile: 리더보드 표 압축 === */
+@media (max-width: 480px){
+  table.leaderboard{
+    table-layout: fixed;       /* 셀 너비 강제 */
+    font-size: 12px;
+  }
+  table.leaderboard th,
+  table.leaderboard td{
+    padding: 6px 4px;          /* 세로·가로 패딩 축소 */
+  }
+  table.leaderboard th{ font-size: 12px; }
+  table.leaderboard td{ font-size: 12px; }
+
+  /* 상태 배지(운행 종료 등)도 컴팩트 */
+  .status{ padding: 2px 8px; font-size: 11px; }
+
+  /* 시간대별 배달(마지막 열)도 축소 */
+  table.leaderboard td.time-col{ font-size: 11px; line-height: 1.2; }
+  .time-grid{ column-gap: 8px; row-gap: 2px; }
+  .time-grid > div{ font-size: 11px; }
+}
+
+/* 매우 좁은 기기 보정 */
+@media (max-width: 360px){
+  table.leaderboard{ font-size: 11px; }
+  table.leaderboard th, table.leaderboard td{ padding: 5px 3px; }
+  .status{ font-size: 10px; padding: 2px 6px; }
+}
+
+/* 표가 정말 좁을 땐 가로 스크롤 허용 */
+.leaderboard-wrapper{ overflow-x: auto; }
