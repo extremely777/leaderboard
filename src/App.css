@@ -266,3 +266,70 @@ table.leaderboard td.time-col {
   /* padding-left: 8px;  // 필요하면 좌측도 따로 조정 */
 }
 
+/* ========= 공통: 모바일 반응형 변수 ========= */
+:root{
+  --donut-size: clamp(64px, 20vw, 100px);      /* 도넛 지름 */
+  --donut-box:  clamp(110px, 24vw, 140px);     /* 각 도넛 박스 너비 */
+  --gap-xl:     clamp(16px, 4vw, 40px);        /* 큰 간격 */
+  --fs-xxs:     clamp(11px, 2.6vw, 13px);
+  --fs-xs:      clamp(12px, 2.8vw, 14px);
+  --fs-sm:      clamp(13px, 3vw, 16px);
+}
+
+/* 도넛 래퍼/텍스트 크기 자동 조절 */
+.goal-doughnut{ width: var(--donut-box); }
+.chart-wrapper{ width: var(--donut-size); height: var(--donut-size); }
+.chart-wrapper canvas{ width:100% !important; height:100% !important; } /* 캔버스 꽉 채우기 */
+.goals-grid{ gap: var(--gap-xl); }
+
+.percentage{ font-size: var(--fs-xs); }
+.label{ font-size: var(--fs-xs); }
+.count{ font-size: var(--fs-xxs); }
+.time-range{ font-size: var(--fs-xxs); }
+
+/* 미션 카드 간격/패딩 축소 */
+.mission-duo-container{ gap: var(--gap-xl); }
+.mission-block{ padding: clamp(18px, 3.5vw, 28px); flex: 1 1 280px; max-width: 520px; }
+
+/* 아주 작은 화면에서 도넛 간격 더 줄이기 */
+@media (max-width: 420px){
+  .goals-grid{ gap: 14px; }
+}
+
+/* 테이블 가로 스크롤(아주 작은 화면 보호) */
+.table-scroll{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 모바일에서 덜 중요한 열 숨기기 */
+@media (max-width: 768px){
+  /* 1:순위 2:라이더 3:운행상태 4:완료 5:거절 6:배차취소 7:라이더귀책 8:시간대별 */
+  table.leaderboard th:nth-child(5),
+  table.leaderboard td:nth-child(5),
+  table.leaderboard th:nth-child(6),
+  table.leaderboard td:nth-child(6),
+  table.leaderboard th:nth-child(7),
+  table.leaderboard td:nth-child(7){
+    display: none;
+  }
+  table.leaderboard th, table.leaderboard td{
+    padding: 10px 6px;
+    font-size: var(--fs-sm);
+  }
+}
+
+/* 아주 작은 화면에서 폰트/패딩 더 줄이기 */
+@media (max-width: 420px){
+  table.leaderboard th, table.leaderboard td{
+    padding: 8px 4px;
+    font-size: var(--fs-xs);
+  }
+}
+
+/* 좌우 여백 살짝 줄여 모바일 답답함 해소 */
+.container{ padding: 0 clamp(10px, 3.5vw, 16px); }
+
+/* 제목도 반응형 */
+h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); }
+.update-time{ font-size: var(--fs-xxs); }

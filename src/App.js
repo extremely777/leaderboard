@@ -223,6 +223,11 @@ function App() {
         <h1>🔸 배달 완료 순위</h1>
         <p className="update-time">마지막 업데이트: {updatedAt}</p>
         <table className="leaderboard">
+		<div className="table-scroll">
+  <table className="leaderboard">
+    {/* ...기존 thead/tbody 그대로... */}
+  </table>
+</div>
           <thead>
             <tr>
               <th>순위</th>
