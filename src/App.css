@@ -36,45 +36,102 @@ h1, h2{
   letter-spacing:-.3px;
 }
 
+/* ========= 공통: 모바일 반응형 변수 ========= */
+:root{
+  --donut-size: clamp(64px, 20vw, 100px);      /* 도넛 지름 */
+  --donut-box:  clamp(110px, 24vw, 140px);     /* 각 도넛 박스 너비 */
+  --gap-xl:     clamp(16px, 4vw, 40px);        /* 큰 간격 */
+  --fs-xxs:     clamp(11px, 2.6vw, 13px);
+  --fs-xs:      clamp(12px, 2.8vw, 14px);
+  --fs-sm:      clamp(13px, 3vw, 16px);
+}
+
 /* ========== 오늘의 목표 (도넛) ========== */
 .goal-box{ margin-bottom: 8px; }
 
 .goals-grid{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:56px;margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:56px;
+  margin-top:10px;
 }
 
 .goal-doughnut{
-  display:flex;flex-direction:column;align-items:center;position:relative;width:140px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+  width:var(--donut-box);
   transition:transform .25s ease, filter .25s ease;
   cursor:pointer;
 }
 .goal-doughnut:hover{ transform:scale(1.08); filter:brightness(1.06); }
 
-.chart-wrapper{ position:relative; width:96px; height:96px; margin-bottom:10px; }
+.chart-wrapper{ position:relative; width:var(--donut-size); height:var(--donut-size); margin-bottom:10px; }
+.chart-wrapper canvas{ width:100% !important; height:100% !important; } /* 캔버스 꽉 채우기 */
+
 .percentage{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:14px;color:#39424C;
+  font-weight:800;font-size:var(--fs-xs);color:#39424C;
 }
 
-.label{ margin-top:2px; font-size:14px; font-weight:700; color:#1E2329; }
-.count{ font-size:13px; color:#5B616E; margin-top:2px; }
+.label{ margin-top:2px; font-size:var(--fs-xs); font-weight:700; color:#1E2329; }
+.count{ font-size:var(--fs-xxs); color:#5B616E; margin-top:2px; }
 .count .goal-value{ color:var(--red); font-weight:700; }
 .goal-reached{ color:var(--red); font-weight:700; }
 
 /* 시간 범례 */
-.time-range{ font-size:11px; color:#8A9099; text-align:center; margin-top:6px; }
+.time-range{ font-size:var(--fs-xxs); color:#8A9099; text-align:center; margin-top:6px; }
+
+/* === Mobile: 도넛 5개 한 줄 === */
+@media (max-width: 480px) {
+  .goals-grid{
+    display:grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    justify-items: center;
+  }
+  .goal-doughnut{ width: auto; }
+  .goal-doughnut .chart-wrapper{ width: 56px; height: 56px; margin-bottom: 4px; }
+  .goal-doughnut .percentage{ font-size: 11px; }
+  .goal-doughnut .label{ font-size: 12px; }
+  .goal-doughnut .count{ font-size: 11px; line-height: 1.1; }
+  .goal-doughnut .time-range{ display: none; } /* 공간 절약 */
+}
+@media (max-width: 420px){
+  .goals-grid{ gap: 14px; }
+  .goal-doughnut .chart-wrapper{ width: 50px; height: 50px; }
+  .goal-doughnut .label{ font-size: 11px; }
+}
 
 /* ========== 업데이트 시간 ========== */
 .update-time{ margin: 6px 0 8px; font-size:13px; color:#6C7280; }
+.update-time{ font-size: var(--fs-xxs); }
 
 /* ========== 배달 완료 순위 (표) ========== */
-table.leaderboard{
-  width:100%; border-collapse:separate; border-spacing:0 10px; font-size:14px;
+/* 가로 스크롤 래퍼(모바일에서도 열 숨김 없이 유지) */
+.lb-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
 }
+
+/* 표 기본 */
+table.leaderboard{
+  width:100%;
+  min-width:1080px;                 /* PC 열 구성을 유지하도록 최소폭 설정 */
+  border-collapse:separate;
+  border-spacing:0 10px;
+  font-size:14px;
+}
+
 table.leaderboard thead th{
   padding:10px 12px; text-align:center; color:#848E9C; font-weight:600;
   border-bottom:1px solid var(--border);
+  background:#fff;
 }
+
 table.leaderboard tbody tr td{
   background:var(--card);
   border-top:1px solid var(--border);
@@ -83,17 +140,32 @@ table.leaderboard tbody tr td{
 }
 table.leaderboard tbody tr td:first-child{
   border-left:1px solid var(--border); border-top-left-radius:10px; border-bottom-left-radius:10px;
+  position:relative;
 }
 table.leaderboard tbody tr td:last-child{
   border-right:1px solid var(--border); border-top-right-radius:10px; border-bottom-right-radius:10px;
 }
 table.leaderboard tbody tr:hover td{ background:#F4F6F8; }
 
+/* (선택) 스크롤 시 헤더/첫 컬럼 고정 */
+.lb-scroll thead th{
+  position:sticky; top:0; z-index:3;
+}
+.lb-scroll tbody td:first-child,
+.lb-scroll thead th:first-child{
+  position:sticky; left:0; z-index:2; background:#fff;
+  box-shadow:1px 0 0 rgba(0,0,0,0.06);
+}
+
 /* 시간대별 2x2 그리드(표 내부 칸) */
 .time-grid{
-  display:grid; grid-template-columns:1fr 1fr; row-gap:4px; column-gap:16px;
+  display:grid; grid-template-columns:repeat(2, max-content); row-gap:8px; column-gap:20px;
+  justify-content:center;
 }
-.time-grid > div{ display:flex; justify-content:space-between; white-space:nowrap; font-size:13px; }
+.time-grid > div{
+  display:flex; align-items:center; justify-content:flex-start; gap:6px;
+  width:max-content; margin:0 auto; white-space:nowrap; font-size:13px;
+}
 .time-num{ text-align:right; }
 
 /* 상태 배지 */
@@ -104,19 +176,51 @@ table.leaderboard tbody tr:hover td{ background:#F4F6F8; }
 .status-running{ background:var(--green); }
 .status-ended{  background:var(--red); }
 
+/* === Mobile: 리더보드 표 압축(열 숨김 없음) === */
+@media (max-width: 768px){
+  table.leaderboard th, table.leaderboard td{
+    padding:10px 6px;
+    font-size:var(--fs-sm);
+    white-space:nowrap;
+  }
+  .status{ padding: 3px 8px; font-size: 12px; }
+  table.leaderboard td.time-col{ font-size: 12px; line-height:1.2; }
+  .time-grid{ column-gap:12px; row-gap:4px; }
+  .time-grid > div{ font-size:12px; }
+}
+@media (max-width: 480px){
+  table.leaderboard{ table-layout:auto; font-size:12px; }
+  table.leaderboard th, table.leaderboard td{ padding:6px 4px; }
+  .status{ padding:2px 8px; font-size:11px; }
+  table.leaderboard td.time-col{ font-size:11px; line-height:1.2; }
+  .time-grid{ column-gap:8px; row-gap:2px; }
+  .time-grid > div{ font-size:11px; }
+}
+@media (max-width: 360px){
+  table.leaderboard{ font-size:11px; }
+  table.leaderboard th, table.leaderboard td{ padding:5px 3px; }
+  .status{ font-size:10px; padding:2px 6px; }
+}
+
+/* 좌우 여백 살짝 줄여 모바일 답답함 해소 */
+.container{ padding: 0 clamp(10px, 3.5vw, 16px); }
+
+/* 제목도 반응형 */
+h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); }
+
 /* ========== 미션 영역 (카드) ========== */
 .mission-box{ margin-top:14px; padding: 0 0 22px 0; background:transparent; border:none; }
 .mission-duo-container {
   margin-top: 16px;
   display: flex;
   justify-content: center;
-  gap: 80px;   /* ✅ 간격 넓힘: 28px → 44px (원하면 48~56px도 OK) */
+  gap: var(--gap-xl);
   flex-wrap: wrap;
   padding: 0 8px;
 }
 .mission-block{
   position:relative; background:var(--panel); border:1px solid var(--border); border-radius:20px;
-  padding:24px 28px; max-width:340px; flex:1 1 280px; box-shadow:var(--shadow); text-align:center;
+  padding: clamp(18px, 3.5vw, 28px); max-width:520px; flex:1 1 280px; box-shadow:var(--shadow); text-align:center;
 }
 
 /* 타이틀 */
@@ -147,14 +251,9 @@ table.leaderboard tbody tr:hover td{ background:#F4F6F8; }
   .mission-title{ font-size:20px; }
 }
 
-/* 기타 강조 */
-.goal-red-bold{ color:var(--red); font-weight:700; }
-
 /* =========================
    미션 카드: Hover 색반전 테마
    ========================= */
-
-/* 1) 기본 테마 값을 커스텀 프로퍼티로 관리 */
 .mission-block{
   --card-bg: rgba(255,255,255,0.65);   /* 평소 배경(밝음) */
   --card-fg: #181818;                  /* 평소 글자색 */
@@ -167,231 +266,84 @@ table.leaderboard tbody tr:hover td{ background:#F4F6F8; }
   transition: background .25s ease, color .25s ease,
               box-shadow .25s ease, transform .18s ease;
 }
-
-/* 카드 테두리(::before)도 함께 전환 */
-.mission-block::before{
-  transition: background .25s ease;
-}
-
-/* 타이틀/아이콘도 현재 글자색을 따르게 */
 .mission-title{ color: var(--card-fg); }
 .mission-title .black-square{
-  background: currentColor;                  /* 글자색과 동일 */
+  background: currentColor;
   box-shadow: 0 0 0 2px rgb(0 0 0 / 0.12);
   transition: background .25s ease, box-shadow .25s ease;
 }
-
-/* 단계 칩(1단계/2단계)도 변수 기반으로 */
 .mission-stage strong{
   background: var(--chip-bg);
   color: var(--chip-fg);
   border-color: var(--chip-border);
   transition: background .25s ease, color .25s ease, border-color .25s ease;
 }
-
-/* 서브 텍스트 색 전환(그룹/개인/시간) */
 .mission-time,
 .mission-stage div{
   color: #666;
   transition: color .25s ease;
 }
-
-/* 2) Hover 시 다크 테마로 "색 반전" 느낌 주기 */
 .mission-block:hover{
-  --card-bg: #121212;                    /* 어두운 배경 */
-  --card-fg: #ffffff;                    /* 밝은 글자 */
-  --chip-bg: rgba(255,255,255,0.16);     /* 칩도 반전 */
+  --card-bg: #121212;
+  --card-fg: #ffffff;
+  --chip-bg: rgba(255,255,255,0.16);
   --chip-fg: #ffffff;
   --chip-border: rgba(255,255,255,0.28);
-
   transform: translateY(-2px);
   box-shadow: 0 16px 40px rgba(0,0,0,0.18);
 }
-
-/* 테두리도 흰색으로 반전 */
-.mission-block:hover::before{
-  background: linear-gradient(#ffffff, #ffffff);
-}
-
-/* 서브 텍스트도 밝게 */
 .mission-block:hover .mission-time,
 .mission-block:hover .mission-stage div{
   color: rgba(255,255,255,0.85);
 }
 
-/* 시간대별 배달: 라벨-숫자 사이만 좁히기 */
-table.leaderboard td.time-col .time-grid {
-  justify-items: center;          /* 각 셀(좌/우)에서 쌍을 가운데 배치 */
+/* === 전체 열을 모바일에서도 모두 보이게 === */
+@media (max-width: 1024px){
+  /* 예전에 nth-child(5~7) 숨긴 규칙 무력화 */
+  table.leaderboard th,
+  table.leaderboard td{
+    display: table-cell !important;
+  }
 }
 
-table.leaderboard td.time-col .time-grid > div {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;    /* space-between 제거 */
-  width: max-content;             /* 내용만큼만 너비 */
-  margin: 0 auto;                 /* 그 상태로 셀 중앙 정렬 */
-  gap: 12px;                       /* ← 라벨-숫자 간격(원하면 4~8px로 조절) */
-}
-
-table.leaderboard td.time-col .time-grid .time-num {
-  text-align: right;              /* 숫자 정렬 유지 */
-}
-
-/* 시간대별 배달: 왼쪽쌍(아점 8) ↔ 오른쪽쌍(오후 17) 사이 간격만 축소 */
-table.leaderboard td.time-col .time-grid {
-  display: grid;
-  grid-template-columns: repeat(2, max-content); /* 1fr 1fr → 내용만큼만 */
-  justify-content: center;                        /* 가운데로 모으기 */
-  column-gap: 20px;                               /* ← 두 쌍 사이 간격 (원하는 값으로 12~28px 조절) */
-  row-gap: 8px;                                   /* 위/아래 줄 간격 */
-}
-
-/* 각 쌍(라벨+숫자)은 내용만큼만, 내부 간격만 유지 */
-table.leaderboard td.time-col .time-grid > div {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: max-content;
-  margin: 0 auto;
-  gap: 6px;                                       /* 라벨-숫자 간격(더 붙이려면 4px로) */
-}
-
-/* 시간대별 배달: 우측 여백만 좁히기 */
-table.leaderboard td.time-col {
-  padding-right: 0px;   /* 기본이 8px 정도일 가능성 → 더 줄이고 싶으면 4px */
-}
-
-/* (선택) 좌측은 그대로 두고 싶지 않으면 아래 줄은 건드리지 마세요 */
-table.leaderboard td.time-col {
-  /* padding-left: 8px;  // 필요하면 좌측도 따로 조정 */
-}
-
-/* ========= 공통: 모바일 반응형 변수 ========= */
-:root{
-  --donut-size: clamp(64px, 20vw, 100px);      /* 도넛 지름 */
-  --donut-box:  clamp(110px, 24vw, 140px);     /* 각 도넛 박스 너비 */
-  --gap-xl:     clamp(16px, 4vw, 40px);        /* 큰 간격 */
-  --fs-xxs:     clamp(11px, 2.6vw, 13px);
-  --fs-xs:      clamp(12px, 2.8vw, 14px);
-  --fs-sm:      clamp(13px, 3vw, 16px);
-}
-
-/* 도넛 래퍼/텍스트 크기 자동 조절 */
-.goal-doughnut{ width: var(--donut-box); }
-.chart-wrapper{ width: var(--donut-size); height: var(--donut-size); }
-.chart-wrapper canvas{ width:100% !important; height:100% !important; } /* 캔버스 꽉 채우기 */
-.goals-grid{ gap: var(--gap-xl); }
-
-.percentage{ font-size: var(--fs-xs); }
-.label{ font-size: var(--fs-xs); }
-.count{ font-size: var(--fs-xxs); }
-.time-range{ font-size: var(--fs-xxs); }
-
-/* 미션 카드 간격/패딩 축소 */
-.mission-duo-container{ gap: var(--gap-xl); }
-.mission-block{ padding: clamp(18px, 3.5vw, 28px); flex: 1 1 280px; max-width: 520px; }
-
-/* 아주 작은 화면에서 도넛 간격 더 줄이기 */
-@media (max-width: 420px){
-  .goals-grid{ gap: 14px; }
-}
-
-/* 테이블 가로 스크롤(아주 작은 화면 보호) */
+/* === 가로 스크롤 래퍼 + 테이블 최소 너비 === */
 .table-scroll{
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
 }
 
-/* 모바일에서 덜 중요한 열 숨기기 */
-@media (max-width: 768px){
-  /* 1:순위 2:라이더 3:운행상태 4:완료 5:거절 6:배차취소 7:라이더귀책 8:시간대별 */
-  table.leaderboard th:nth-child(5),
-  table.leaderboard td:nth-child(5),
-  table.leaderboard th:nth-child(6),
-  table.leaderboard td:nth-child(6),
-  table.leaderboard th:nth-child(7),
-  table.leaderboard td:nth-child(7){
-    display: none;
-  }
-  table.leaderboard th, table.leaderboard td{
-    padding: 10px 6px;
-    font-size: var(--fs-sm);
-  }
+/* 칼럼 8개 전부 보이도록 최소 너비를 강제로 확보 (원하면 값 조절) */
+.table-scroll .leaderboard{
+  min-width: 1080px;   /* 1000~1200px 사이에서 취향대로 */
 }
 
-/* 아주 작은 화면에서 폰트/패딩 더 줄이기 */
-@media (max-width: 420px){
-  table.leaderboard th, table.leaderboard td{
-    padding: 8px 4px;
-    font-size: var(--fs-xs);
-  }
-}
-
-/* 좌우 여백 살짝 줄여 모바일 답답함 해소 */
-.container{ padding: 0 clamp(10px, 3.5vw, 16px); }
-
-/* 제목도 반응형 */
-h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); }
-.update-time{ font-size: var(--fs-xxs); }
-
-/* === Mobile: 도넛 5개 한 줄 === */
-@media (max-width: 480px) {
-  .goals-grid{
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
-    justify-items: center;
-  }
-  .goal-doughnut{ width: auto; }
-  .goal-doughnut .chart-wrapper{ width: 56px; height: 56px; margin-bottom: 4px; }
-  .goal-doughnut .percentage{ font-size: 11px; }
-  .goal-doughnut .label{ font-size: 12px; }
-  .goal-doughnut .count{ font-size: 11px; line-height: 1.1; }
-
-  /* 공간 절약 위해 시간대 설명은 모바일에서 숨김 */
-  .goal-doughnut .time-range{ display: none; }
-}
-
-/* 초소형 기기(예: 360px 이하) 보정 */
-@media (max-width: 360px){
-  .goal-doughnut .chart-wrapper{ width: 50px; height: 50px; }
-  .goal-doughnut .label{ font-size: 11px; }
-}
-
-/* 대안: 도넛을 가로 스크롤로 보기 */
+/* 모바일에서 조금 더 촘촘하게 보이도록 */
 @media (max-width: 480px){
-  .goals-grid{ display: block; white-space: nowrap; overflow-x: auto; padding-bottom: 6px; }
-  .goal-doughnut{ display: inline-flex; width: 120px; margin-right: 12px; }
-}
-
-/* === Mobile: 리더보드 표 압축 === */
-@media (max-width: 480px){
-  table.leaderboard{
-    table-layout: fixed;       /* 셀 너비 강제 */
+  .table-scroll .leaderboard th,
+  .table-scroll .leaderboard td{
+    padding: 8px 6px;
     font-size: 12px;
   }
-  table.leaderboard th,
-  table.leaderboard td{
-    padding: 6px 4px;          /* 세로·가로 패딩 축소 */
-  }
-  table.leaderboard th{ font-size: 12px; }
-  table.leaderboard td{ font-size: 12px; }
-
-  /* 상태 배지(운행 종료 등)도 컴팩트 */
-  .status{ padding: 2px 8px; font-size: 11px; }
-
-  /* 시간대별 배달(마지막 열)도 축소 */
-  table.leaderboard td.time-col{ font-size: 11px; line-height: 1.2; }
-  .time-grid{ column-gap: 8px; row-gap: 2px; }
-  .time-grid > div{ font-size: 11px; }
+  .status{ font-size: 11px; padding: 2px 8px; }
 }
 
-/* 매우 좁은 기기 보정 */
-@media (max-width: 360px){
-  table.leaderboard{ font-size: 11px; }
-  table.leaderboard th, table.leaderboard td{ padding: 5px 3px; }
-  .status{ font-size: 10px; padding: 2px 6px; }
+/* === 스크롤 안에서 thead를 고정(스티키 헤더) === */
+.table-scroll thead th{
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 2;
 }
 
-/* 표가 정말 좁을 땐 가로 스크롤 허용 */
-.leaderboard-wrapper{ overflow-x: auto; }
+/* 스크롤 힌트(선택) */
+.scroll-hint{
+  display:none;
+  font-size:12px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  text-align:right;
+}
+@media (max-width:768px){
+  .scroll-hint{ display:block; }
+}

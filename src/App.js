@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+// src/App.js
+import React, { useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
 import "./App.css";
 import GoalDoughnut from "./components/GoalDoughnut";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]);        // 👀 리더보드 표시용(상위 10명)
+  const [allRows, setAllRows] = useState([]);  // 📊 도넛 통계용(전체)
   const [updatedAt, setUpdatedAt] = useState("");
   const [goalValues, setGoalValues] = useState({
     total: 0,
@@ -18,7 +20,6 @@ function App() {
   const csvUrl =
     "https://docs.google.com/spreadsheets/d/1hB4VvKXW265xGTOyodfh56eADx_7qUrKK-T2cfJHi28/export?format=csv&id=1hB4VvKXW265xGTOyodfh56eADx_7qUrKK-T2cfJHi28&gid=0";
 
-  // ✅ 자동 최신화(+ 캐시 무력화)
   useEffect(() => {
     const load = async () => {
       try {
@@ -47,14 +48,12 @@ function App() {
 
         // 🕒 오전 + 오후 미션 정보
         const mission = {
-          // 오전
           morningTime: rows[9]?.[14] || "",
           morningStage1: Number(rows[10]?.[14]) || 0,
           morningStage1Personal: Number(rows[11]?.[14]) || 0,
           morningStage2: Number(rows[12]?.[14]) || 0,
           morningStage2Personal: Number(rows[13]?.[14]) || 0,
 
-          // 오후
           afternoonTime: rows[15]?.[14] || "",
           afternoonStage1: Number(rows[16]?.[14]) || 0,
           afternoonStage1Personal: Number(rows[17]?.[14]) || 0,
@@ -63,7 +62,7 @@ function App() {
         };
         setMissionData(mission);
 
-        // 📊 리더보드
+        // 📊 리더보드 파싱
         const headers = rows[0].map((h) => h.trim());
         const bodyRows = rows.slice(1).filter((row) => row[0] && row[0] !== "");
         const dataObjects = bodyRows.map((row) => {
@@ -73,10 +72,13 @@ function App() {
           });
           return obj;
         });
+
         const sorted = dataObjects.sort(
           (a, b) => Number(b["완료"]) - Number(a["완료"])
         );
-        setData(sorted.slice(0, 10));
+
+        setAllRows(sorted);           // ✅ 도넛 계산은 전체 기준
+        setData(sorted.slice(0, 10)); // ✅ 표시는 상위 10명만
 
         // ⏰ 업데이트 시간
         const now = new Date();
@@ -98,24 +100,21 @@ function App() {
     return () => clearInterval(id);
   }, [csvUrl]);
 
-  // ✅ 통계 계산
-  const stats = {
-    totalDone: 0,
-    timeSegments: {
-      morning: 0,
-      afternoon: 0,
-      evening: 0,
-      night: 0,
-    },
-  };
-
-  data.forEach((row) => {
-    stats.totalDone += Number(row["완료"]) || 0;
-    stats.timeSegments.morning += Number(row["아침점심피크"]) || 0;
-    stats.timeSegments.afternoon += Number(row["오후논피크"]) || 0;
-    stats.timeSegments.evening += Number(row["저녁피크"]) || 0;
-    stats.timeSegments.night += Number(row["심야논피크"]) || 0;
-  });
+  // ✅ 도넛 통계는 전체(allRows)로 계산
+  const stats = useMemo(() => {
+    const acc = {
+      totalDone: 0,
+      timeSegments: { morning: 0, afternoon: 0, evening: 0, night: 0 },
+    };
+    allRows.forEach((row) => {
+      acc.totalDone += Number(row["완료"]) || 0;
+      acc.timeSegments.morning += Number(row["아침점심피크"]) || 0;
+      acc.timeSegments.afternoon += Number(row["오후논피크"]) || 0;
+      acc.timeSegments.evening += Number(row["저녁피크"]) || 0;
+      acc.timeSegments.night += Number(row["심야논피크"]) || 0;
+    });
+    return acc;
+  }, [allRows]);
 
   return (
     <>
@@ -169,6 +168,7 @@ function App() {
           </div>
         </div>
 
+        {/* 🔸 오늘의 미션 */}
         {missionData && (
           <div className="mission-box">
             <h1>🔸 오늘의 미션</h1>
@@ -222,54 +222,54 @@ function App() {
         {/* 🏆 배달 완료 순위 */}
         <h1>🔸 배달 완료 순위</h1>
         <p className="update-time">마지막 업데이트: {updatedAt}</p>
-        <table className="leaderboard">
-		<div className="table-scroll">
-  <table className="leaderboard">
-    {/* ...기존 thead/tbody 그대로... */}
-  </table>
-</div>
-          <thead>
-            <tr>
-              <th>순위</th>
-              <th>라이더</th>
-              <th>운행상태</th>
-              <th>완료</th>
-              <th>거절</th>
-              <th>배차취소</th>
-              <th>라이더귀책</th>
-              <th>시간대별 배달</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, idx) => (
-              <tr key={idx}>
-                <td>{idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : idx + 1}</td>
-                <td>{row["이름"]}</td>
-                <td>
-                  <span
-                    className={
-                      row["운행상태"] === "운행중" ? "status status-running" : "status status-ended"
-                    }
-                  >
-                    {row["운행상태"]}
-                  </span>
-                </td>
-                <td>{row["완료"]}</td>
-                <td>{row["거절"]}</td>
-                <td>{row["배차취소"]}</td>
-                <td>{row["배달취소(라이더귀책)"]}</td>
-                <td className="time-col">
-                  <div className="time-grid">
-                    <div><span>아점</span><span className="time-num">{row["아침점심피크"]}</span></div>
-                    <div><span>오후</span><span className="time-num">{row["오후논피크"]}</span></div>
-                    <div><span>저녁</span><span className="time-num">{row["저녁피크"]}</span></div>
-                    <div><span>심야</span><span className="time-num">{row["심야논피크"]}</span></div>
-                  </div>
-                </td>
+
+        {/* 가로 스크롤 래퍼 */}
+        <div className="table-scroll">
+          <table className="leaderboard">
+            <thead>
+              <tr>
+                <th>순위</th>
+                <th>라이더</th>
+                <th>운행상태</th>
+                <th>완료</th>
+                <th>거절</th>
+                <th>배차취소</th>
+                <th>라이더귀책</th>
+                <th>시간대별 배달</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((row, idx) => (
+                <tr key={idx}>
+                  <td>{idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : idx + 1}</td>
+                  <td>{row["이름"]}</td>
+                  <td>
+                    <span
+                      className={
+                        row["운행상태"] === "운행중" ? "status status-running" : "status status-ended"
+                      }
+                    >
+                      {row["운행상태"]}
+                    </span>
+                  </td>
+                  <td>{row["완료"]}</td>
+                  <td>{row["거절"]}</td>
+                  <td>{row["배차취소"]}</td>
+                  <td>{row["배달취소(라이더귀책)"]}</td>
+                  <td className="time-col">
+                    <div className="time-grid">
+                      <div><span>아점</span><span className="time-num">{row["아침점심피크"]}</span></div>
+                      <div><span>오후</span><span className="time-num">{row["오후논피크"]}</span></div>
+                      <div><span>저녁</span><span className="time-num">{row["저녁피크"]}</span></div>
+                      <div><span>심야</span><span className="time-num">{row["심야논피크"]}</span></div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </>
   );
