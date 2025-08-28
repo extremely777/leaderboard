@@ -452,3 +452,22 @@ table.leaderboard th, table.leaderboard td{
   color: #fff !important;
   border-color: rgba(255,255,255,.3) !important;
 }
+
+/* 숫자 폭 고정 + 정렬 */
+.goal-doughnut .time-range,
+.goal-doughnut .time-range *{
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.goal-doughnut .time-range{
+  text-align: center;    /* 필요시 left로 변경 */
+}
+
+@media (max-width:480px){
+  .goal-doughnut .time-range{
+    display:block !important;
+    font-size:11px; line-height:1.2; margin-top:4px;
+  }
+  .goal-doughnut .time-range > div{ display:block; }
+}

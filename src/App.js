@@ -161,24 +161,24 @@ function App() {
             <div className="goal-doughnut">
               <GoalDoughnut label="아점" current={stats.timeSegments.morning} goal={goalValues.morning} />
               <div className="time-range">
-                <div>평일 : 06:00 ~ 12:59</div>
-                <div>주말 : 06:00 ~ 13:59</div>
+                <div>평일: 06:00~12:59</div>
+                <div>주말: 06:00~13:59</div>
               </div>
             </div>
             <div className="goal-doughnut">
               <GoalDoughnut label="오후" current={stats.timeSegments.afternoon} goal={goalValues.afternoon} />
               <div className="time-range">
-                <div>평일 : 13:00 ~ 16:59</div>
-                <div>주말 : 14:00 ~ 16:59</div>
+                <div>평일: 13:00~16:59</div>
+                <div>주말: 14:00~16:59</div>
               </div>
             </div>
             <div className="goal-doughnut">
               <GoalDoughnut label="저녁" current={stats.timeSegments.evening} goal={goalValues.evening} />
-              <div className="time-range">17:00 ~ 19:59</div>
+              <div className="time-range">17:00~19:59</div>
             </div>
             <div className="goal-doughnut">
               <GoalDoughnut label="심야" current={stats.timeSegments.night} goal={goalValues.night} />
-              <div className="time-range">20:00 ~ 02:59</div>
+              <div className="time-range">20:00~02:59</div>
             </div>
           </div>
         </div>
