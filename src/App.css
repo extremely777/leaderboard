@@ -471,3 +471,21 @@ table.leaderboard th, table.leaderboard td{
   }
   .goal-doughnut .time-range > div{ display:block; }
 }
+
+/* === 오늘의 목표: 상단 고정(Sticky) === */
+.goal-sticky{
+  position: sticky;
+  top: 0;                           /* 화면 최상단에 고정 */
+  z-index: 50;                      /* 다른 요소 위로 */
+  background: var(--bg);            /* 겹침 시 내용 가림 방지 */
+  border-bottom: 1px solid var(--border);
+  /* 보기 좋은 살짝의 유리 효과(선택) */
+  backdrop-filter: saturate(160%) blur(6px);
+  -webkit-backdrop-filter: saturate(160%) blur(6px);
+}
+
+/* 좁은 화면에서 고정 영역이 과하게 커 보이지 않도록 살짝 압축(선택) */
+@media (max-width: 480px){
+  .goal-box{ padding: 6px 0 8px; }
+  .goals-grid{ gap: 8px; }
+}

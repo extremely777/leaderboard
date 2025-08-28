@@ -52,7 +52,7 @@ function App() {
           night: goalMap["심야"] || 0,
         });
 
-        /* 🕒 미션 정보 (사용자 지정 좌표)
+        /* 🕒 미션 정보 (N/P 좌표)
            - 열: N = index 13, P = index 15
            - 행: 10 → index 9
         */
@@ -151,34 +151,63 @@ function App() {
       />
 
       <div className="container">
-        {/* 🎯 오늘의 목표 */}
-        <div className="goal-box">
-          <h1>🔸 오늘의 목표</h1>
-          <div className="goals-grid">
-            <div className="goal-doughnut">
-              <GoalDoughnut label="총 완료" current={stats.totalDone} goal={goalValues.total} />
-            </div>
-            <div className="goal-doughnut">
-              <GoalDoughnut label="아점" current={stats.timeSegments.morning} goal={goalValues.morning} />
-              <div className="time-range">
-                <div>평일: 06:00~12:59</div>
-                <div>주말: 06:00~13:59</div>
+        {/* 🎯 오늘의 목표 (상단 고정) */}
+        <div className="goal-sticky">
+          <div className="goal-box">
+            <h1>🔸 오늘의 목표</h1>
+            <div className="goals-grid">
+              <div className="goal-doughnut">
+                <GoalDoughnut label="총 완료" current={stats.totalDone} goal={goalValues.total} />
               </div>
-            </div>
-            <div className="goal-doughnut">
-              <GoalDoughnut label="오후" current={stats.timeSegments.afternoon} goal={goalValues.afternoon} />
-              <div className="time-range">
-                <div>평일: 13:00~16:59</div>
-                <div>주말: 14:00~16:59</div>
+
+              <div className="goal-doughnut">
+                <GoalDoughnut label="아점" current={stats.timeSegments.morning} goal={goalValues.morning} />
+                {/* 정렬: 라벨/값 2열 */}
+                <div className="time-range">
+                  <div className="tr">
+                    <span className="tr-label">평일</span>
+                    <span className="tr-value">06:00 ~ 12:59</span>
+                  </div>
+                  <div className="tr">
+                    <span className="tr-label">주말</span>
+                    <span className="tr-value">06:00 ~ 13:59</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="goal-doughnut">
-              <GoalDoughnut label="저녁" current={stats.timeSegments.evening} goal={goalValues.evening} />
-              <div className="time-range">17:00~19:59</div>
-            </div>
-            <div className="goal-doughnut">
-              <GoalDoughnut label="심야" current={stats.timeSegments.night} goal={goalValues.night} />
-              <div className="time-range">20:00~02:59</div>
+
+              <div className="goal-doughnut">
+                <GoalDoughnut label="오후" current={stats.timeSegments.afternoon} goal={goalValues.afternoon} />
+                <div className="time-range">
+                  <div className="tr">
+                    <span className="tr-label">평일</span>
+                    <span className="tr-value">13:00 ~ 16:59</span>
+                  </div>
+                  <div className="tr">
+                    <span className="tr-label">주말</span>
+                    <span className="tr-value">14:00 ~ 16:59</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="goal-doughnut">
+                <GoalDoughnut label="저녁" current={stats.timeSegments.evening} goal={goalValues.evening} />
+                <div className="time-range">
+                  <div className="tr">
+                    <span className="tr-label">시간</span>
+                    <span className="tr-value">17:00 ~ 19:59</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="goal-doughnut">
+                <GoalDoughnut label="심야" current={stats.timeSegments.night} goal={goalValues.night} />
+                <div className="time-range">
+                  <div className="tr">
+                    <span className="tr-label">시간</span>
+                    <span className="tr-value">20:00 ~ 02:59</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -295,3 +324,4 @@ function App() {
 }
 
 export default App;
+
