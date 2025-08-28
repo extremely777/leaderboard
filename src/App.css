@@ -97,7 +97,19 @@ h1, h2{
   .goal-doughnut .percentage{ font-size: 11px; }
   .goal-doughnut .label{ font-size: 12px; }
   .goal-doughnut .count{ font-size: 11px; line-height: 1.1; }
-  .goal-doughnut .time-range{ display: none; } /* 공간 절약 */
+
+  /* ✅ 모바일에서도 시간 표시 (숨김 해제 & 축소) */
+  .goal-doughnut .time-range{
+    display: block !important;
+    font-size: 11px;
+    line-height: 1.2;
+    margin-top: 4px;
+    color: #8A9099;
+    text-align: center;
+  }
+  .goal-doughnut .time-range > div{
+    display: block;  /* 평일/주말 줄바꿈 */
+  }
 }
 @media (max-width: 420px){
   .goals-grid{ gap: 14px; }
@@ -299,7 +311,6 @@ h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); 
 
 /* === 전체 열을 모바일에서도 모두 보이게 === */
 @media (max-width: 1024px){
-  /* 예전에 nth-child(5~7) 숨긴 규칙 무력화 */
   table.leaderboard th,
   table.leaderboard td{
     display: table-cell !important;
@@ -323,7 +334,7 @@ h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); 
   .table-scroll .leaderboard th,
   .table-scroll .leaderboard td{
     padding: 8px 6px;
-    font-size: 12px;
+   .font-size: 12px;
   }
   .status{ font-size: 11px; padding: 2px 8px; }
 }
@@ -373,8 +384,8 @@ th.rider, td.rider { min-width: var(--col-rider); width: var(--col-rider); }
 .sticky-col{
   position: sticky;
   left: 0;
-  z-index: 2;                     /* 다른 셀 위에 오도록 */
-  background: var(--card, #fff);  /* 스크롤해도 불투명 배경 유지 */
+  z-index: 2;                     
+  background: var(--card, #fff);  
 }
 
 /* 두 번째 고정 열(라이더)은 첫 열 너비만큼 오른쪽에 고정 */
@@ -432,12 +443,12 @@ table.leaderboard th, table.leaderboard td{
 
 /* Hover(카드 반전 시에도 칩 색 유지 & 가독성 향상) */
 .mission-block:hover .mission-stages .mission-stage:nth-child(1) strong{
-  background: rgba(37, 194, 110, .22) !important; /* 초록 계열 살짝 진하게 */
+  background: rgba(37, 194, 110, .22) !important; 
   color: #fff !important;
   border-color: rgba(255,255,255,.3) !important;
 }
 .mission-block:hover .mission-stages .mission-stage:nth-child(2) strong{
-  background: rgba(59, 130, 246, .22) !important; /* 파랑 계열 살짝 진하게 */
+  background: rgba(59, 130, 246, .22) !important; 
   color: #fff !important;
   border-color: rgba(255,255,255,.3) !important;
 }
