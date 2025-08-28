@@ -212,64 +212,58 @@ function App() {
           </div>
         </div>
 
-        {/* 🔸 오늘의 미션 */}
+        {/* 🔸 오늘의 미션 (가로 스크롤 제거, 기존 2열 카드 유지) */}
         {missionData && (
           <div className="mission-box">
             <h1>🔸 오늘의 미션</h1>
 
-            {/* ✅ 가로 스크롤 래퍼 */}
-            <div className="mission-scroll">
-              <div className="mission-duo-container">
-                {/* 오전 미션 */}
-                <div className="mission-block">
-                  <div className="mission-title">
-                    <span className="black-square" /> {missionData.morningTitle || "오전 미션"}
-                  </div>
-                  <div className="mission-time">{missionData.morningTime}</div>
+            <div className="mission-duo-container">
+              {/* 오전 미션 */}
+              <div className="mission-block">
+                <div className="mission-title">
+                  <span className="black-square" /> {missionData.morningTitle || "오전 미션"}
+                </div>
+                <div className="mission-time">{missionData.morningTime}</div>
 
-                  <div className="mission-stages">
-                    <div className="mission-stage">
-                      <strong>{missionData.morningStage1Label || "1단계"}</strong>
-                      <div>그룹 : {missionData.morningStage1Team}</div>
-                      <div>개인 : {missionData.morningStage1Personal}</div>
-                      <div>보상 : {fmtCurrency(missionData.morningStage1Reward)}</div>
-                    </div>
-                    <div className="mission-stage">
-                      <strong>{missionData.morningStage2Label || "2단계"}</strong>
-                      <div>그룹 : {missionData.morningStage2Team}</div>
-                      <div>개인 : {missionData.morningStage2Personal}</div>
-                      <div>보상 : {fmtCurrency(missionData.morningStage2Reward)}</div>
-                    </div>
+                <div className="mission-stages">
+                  <div className="mission-stage">
+                    <strong>{missionData.morningStage1Label || "1단계"}</strong>
+                    <div>그룹 : {missionData.morningStage1Team}</div>
+                    <div>개인 : {missionData.morningStage1Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.morningStage1Reward)}</div>
+                  </div>
+                  <div className="mission-stage">
+                    <strong>{missionData.morningStage2Label || "2단계"}</strong>
+                    <div>그룹 : {missionData.morningStage2Team}</div>
+                    <div>개인 : {missionData.morningStage2Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.morningStage2Reward)}</div>
                   </div>
                 </div>
+              </div>
 
-                {/* 오후 미션 */}
-                <div className="mission-block">
-                  <div className="mission-title">
-                    <span className="black-square" /> {missionData.afternoonTitle || "오후 미션"}
+              {/* 오후 미션 */}
+              <div className="mission-block">
+                <div className="mission-title">
+                  <span className="black-square" /> {missionData.afternoonTitle || "오후 미션"}
+                </div>
+                <div className="mission-time">{missionData.afternoonTime}</div>
+
+                <div className="mission-stages">
+                  <div className="mission-stage">
+                    <strong>{missionData.afternoonStage1Label || "1단계"}</strong>
+                    <div>그룹 : {missionData.afternoonStage1Team}</div>
+                    <div>개인 : {missionData.afternoonStage1Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.afternoonStage1Reward)}</div>
                   </div>
-                  <div className="mission-time">{missionData.afternoonTime}</div>
-
-                  <div className="mission-stages">
-                    <div className="mission-stage">
-                      <strong>{missionData.afternoonStage1Label || "1단계"}</strong>
-                      <div>그룹 : {missionData.afternoonStage1Team}</div>
-                      <div>개인 : {missionData.afternoonStage1Personal}</div>
-                      <div>보상 : {fmtCurrency(missionData.afternoonStage1Reward)}</div>
-                    </div>
-                    <div className="mission-stage">
-                      <strong>{missionData.afternoonStage2Label || "2단계"}</strong>
-                      <div>그룹 : {missionData.afternoonStage2Team}</div>
-                      <div>개인 : {missionData.afternoonStage2Personal}</div>
-                      <div>보상 : {fmtCurrency(missionData.afternoonStage2Reward)}</div>
-                    </div>
+                  <div className="mission-stage">
+                    <strong>{missionData.afternoonStage2Label || "2단계"}</strong>
+                    <div>그룹 : {missionData.afternoonStage2Team}</div>
+                    <div>개인 : {missionData.afternoonStage2Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.afternoonStage2Reward)}</div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* 모바일 스크롤 힌트(선택) */}
-            <p className="scroll-hint mission-hint">좌우로 넘겨보세요 →</p>
           </div>
         )}
 
