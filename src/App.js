@@ -160,50 +160,51 @@ function App() {
                 <GoalDoughnut label="총 완료" current={stats.totalDone} goal={goalValues.total} />
               </div>
 
+              {/* 아점 */}
               <div className="goal-doughnut">
                 <GoalDoughnut label="아점" current={stats.timeSegments.morning} goal={goalValues.morning} />
-                {/* 정렬: 라벨/값 2열 */}
                 <div className="time-range">
                   <div className="tr">
-                    <span className="tr-label">평일</span>
+                    <span className="tr-label weekday">평일</span>
                     <span className="tr-value">06:00 ~ 12:59</span>
                   </div>
                   <div className="tr">
-                    <span className="tr-label">주말</span>
+                    <span className="tr-label weekend">주말</span>
                     <span className="tr-value">06:00 ~ 13:59</span>
                   </div>
                 </div>
               </div>
 
+              {/* 오후 */}
               <div className="goal-doughnut">
                 <GoalDoughnut label="오후" current={stats.timeSegments.afternoon} goal={goalValues.afternoon} />
                 <div className="time-range">
                   <div className="tr">
-                    <span className="tr-label">평일</span>
+                    <span className="tr-label weekday">평일</span>
                     <span className="tr-value">13:00 ~ 16:59</span>
                   </div>
                   <div className="tr">
-                    <span className="tr-label">주말</span>
+                    <span className="tr-label weekend">주말</span>
                     <span className="tr-value">14:00 ~ 16:59</span>
                   </div>
                 </div>
               </div>
 
+              {/* 저녁 — 라벨 제거, 시간만 */}
               <div className="goal-doughnut">
                 <GoalDoughnut label="저녁" current={stats.timeSegments.evening} goal={goalValues.evening} />
                 <div className="time-range">
                   <div className="tr">
-                    <span className="tr-label">시간</span>
                     <span className="tr-value">17:00 ~ 19:59</span>
                   </div>
                 </div>
               </div>
 
+              {/* 심야 — 라벨 제거, 시간만 */}
               <div className="goal-doughnut">
                 <GoalDoughnut label="심야" current={stats.timeSegments.night} goal={goalValues.night} />
                 <div className="time-range">
                   <div className="tr">
-                    <span className="tr-label">시간</span>
                     <span className="tr-value">20:00 ~ 02:59</span>
                   </div>
                 </div>
@@ -212,7 +213,7 @@ function App() {
           </div>
         </div>
 
-        {/* 🔸 오늘의 미션 (가로 스크롤 제거, 기존 2열 카드 유지) */}
+        {/* 🔸 오늘의 미션 */}
         {missionData && (
           <div className="mission-box">
             <h1>🔸 오늘의 미션</h1>
