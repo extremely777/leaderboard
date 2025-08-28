@@ -347,3 +347,97 @@ h1{ font-size: clamp(18px, 4.5vw, 26px); margin-bottom: clamp(18px, 4vw, 40px); 
 @media (max-width:768px){
   .scroll-hint{ display:block; }
 }
+
+/* 가로 스크롤 컨테이너 */
+.table-scroll{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 테이블이 스크롤을 만들도록 최소 너비를 주는 게 안전 */
+table.leaderboard{
+  min-width: 960px; /* 화면보다 넓게 해서 스크롤 발생 */
+}
+
+/* 고정 열의 기준 너비(순위, 라이더) */
+:root{
+  --col-rank: 68px;     /* 순위 열 너비 */
+  --col-rider: 140px;   /* 라이더 열 너비 */
+}
+
+/* 순위/라이더 헤더·셀 기본 너비 */
+th.rank, td.rank   { min-width: var(--col-rank);  width: var(--col-rank);  }
+th.rider, td.rider { min-width: var(--col-rider); width: var(--col-rider); }
+
+/* sticky(고정) 공통 */
+.sticky-col{
+  position: sticky;
+  left: 0;
+  z-index: 2;                     /* 다른 셀 위에 오도록 */
+  background: var(--card, #fff);  /* 스크롤해도 불투명 배경 유지 */
+}
+
+/* 두 번째 고정 열(라이더)은 첫 열 너비만큼 오른쪽에 고정 */
+.sticky-col-2{
+  position: sticky;
+  left: calc(var(--col-rank));
+  z-index: 2;
+  background: var(--card, #fff);
+}
+
+/* 헤더는 셀보다 z-index 더 높게 (겹침 방지) */
+thead .sticky-col,
+thead .sticky-col-2{
+  z-index: 3;
+}
+
+/* 고정 열 오른쪽 경계 강조(선택) */
+.sticky-col-2{
+  box-shadow: 2px 0 0 0 rgba(0,0,0,0.06);
+}
+
+/* 헤더/셀은 줄바꿈을 막아 폭이 흔들리지 않게 */
+table.leaderboard th, table.leaderboard td{
+  white-space: nowrap;
+}
+
+/* =========================
+   Stage colors (pastel chips)
+   ========================= */
+:root{
+  /* 1단계(연한 초록) */
+  --stage1-bg:     #EAF8F1;  /* chip background */
+  --stage1-fg:     #0F7A4A;  /* text */
+  --stage1-border: #CDEEDF;
+
+  /* 2단계(연한 파랑) */
+  --stage2-bg:     #EEF4FF;
+  --stage2-fg:     #1E4DB7;
+  --stage2-border: #D7E4FF;
+}
+
+/* 1단계 칩 */
+.mission-stages .mission-stage:nth-child(1) strong{
+  background: var(--stage1-bg) !important;
+  color: var(--stage1-fg) !important;
+  border-color: var(--stage1-border) !important;
+}
+
+/* 2단계 칩 */
+.mission-stages .mission-stage:nth-child(2) strong{
+  background: var(--stage2-bg) !important;
+  color: var(--stage2-fg) !important;
+  border-color: var(--stage2-border) !important;
+}
+
+/* Hover(카드 반전 시에도 칩 색 유지 & 가독성 향상) */
+.mission-block:hover .mission-stages .mission-stage:nth-child(1) strong{
+  background: rgba(37, 194, 110, .22) !important; /* 초록 계열 살짝 진하게 */
+  color: #fff !important;
+  border-color: rgba(255,255,255,.3) !important;
+}
+.mission-block:hover .mission-stages .mission-stage:nth-child(2) strong{
+  background: rgba(59, 130, 246, .22) !important; /* 파랑 계열 살짝 진하게 */
+  color: #fff !important;
+  border-color: rgba(255,255,255,.3) !important;
+}

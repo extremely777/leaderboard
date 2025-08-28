@@ -20,6 +20,12 @@ function App() {
   const csvUrl =
     "https://docs.google.com/spreadsheets/d/1hB4VvKXW265xGTOyodfh56eADx_7qUrKK-T2cfJHi28/export?format=csv&id=1hB4VvKXW265xGTOyodfh56eADx_7qUrKK-T2cfJHi28&gid=0";
 
+  // 안전 숫자 파서 (콤마/원/공백 제거)
+  const toNumber = (v) => Number(String(v ?? "").replace(/[^\d.-]/g, "")) || 0;
+
+  // 통화 포맷
+  const fmtCurrency = (n) => `${(Number(n) || 0).toLocaleString("ko-KR")}원`;
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -30,7 +36,7 @@ function App() {
         const parsed = Papa.parse(text, { skipEmptyLines: true });
         const rows = parsed.data;
 
-        // 🎯 목표값
+        // 🎯 목표값 (N~S열 영역: slice(13,19) = index 13~18)
         const goalHeaders = rows[1].slice(13, 19);
         const goalValuesRaw = rows[2].slice(13, 19);
         const goalMap = {};
@@ -46,19 +52,37 @@ function App() {
           night: goalMap["심야"] || 0,
         });
 
-        // 🕒 오전 + 오후 미션 정보
-        const mission = {
-          morningTime: rows[9]?.[14] || "",
-          morningStage1: Number(rows[10]?.[14]) || 0,
-          morningStage1Personal: Number(rows[11]?.[14]) || 0,
-          morningStage2: Number(rows[12]?.[14]) || 0,
-          morningStage2Personal: Number(rows[13]?.[14]) || 0,
+        /* 🕒 미션 정보 (사용자 지정 좌표)
+           - 열: N = index 13, P = index 15
+           - 행: 10 → index 9
+        */
+        const colN = 13;
+        const colP = 15;
 
-          afternoonTime: rows[15]?.[14] || "",
-          afternoonStage1: Number(rows[16]?.[14]) || 0,
-          afternoonStage1Personal: Number(rows[17]?.[14]) || 0,
-          afternoonStage2: Number(rows[18]?.[14]) || 0,
-          afternoonStage2Personal: Number(rows[19]?.[14]) || 0,
+        const mission = {
+          // 오전 미션
+          morningTitle: rows[9]?.[colN] || "",         // N10
+          morningTime: rows[9]?.[colP] || "",          // P10
+          morningStage1Label: rows[10]?.[colN] || "",  // N11
+          morningStage1Team: toNumber(rows[10]?.[colP]),      // P11
+          morningStage1Personal: toNumber(rows[11]?.[colP]),  // P12
+          morningStage1Reward: toNumber(rows[12]?.[colP]),    // P13
+          morningStage2Label: rows[13]?.[colN] || "",  // N14
+          morningStage2Team: toNumber(rows[13]?.[colP]),      // P14
+          morningStage2Personal: toNumber(rows[14]?.[colP]),  // P15
+          morningStage2Reward: toNumber(rows[15]?.[colP]),    // P16
+
+          // 오후 미션
+          afternoonTitle: rows[16]?.[colN] || "",       // N17
+          afternoonTime: rows[16]?.[colP] || "",        // P17
+          afternoonStage1Label: rows[17]?.[colN] || "", // N18
+          afternoonStage1Team: toNumber(rows[17]?.[colP]),     // P18
+          afternoonStage1Personal: toNumber(rows[18]?.[colP]), // P19
+          afternoonStage1Reward: toNumber(rows[19]?.[colP]),   // P20
+          afternoonStage2Label: rows[20]?.[colN] || "", // N21
+          afternoonStage2Team: toNumber(rows[20]?.[colP]),     // P21
+          afternoonStage2Personal: toNumber(rows[21]?.[colP]), // P22
+          afternoonStage2Reward: toNumber(rows[22]?.[colP]),   // P23
         };
         setMissionData(mission);
 
@@ -67,27 +91,18 @@ function App() {
         const bodyRows = rows.slice(1).filter((row) => row[0] && row[0] !== "");
         const dataObjects = bodyRows.map((row) => {
           const obj = {};
-          headers.forEach((header, i) => {
-            obj[header] = row[i];
-          });
+          headers.forEach((header, i) => { obj[header] = row[i]; });
           return obj;
         });
 
-        const sorted = dataObjects.sort(
-          (a, b) => Number(b["완료"]) - Number(a["완료"])
-        );
-
+        const sorted = dataObjects.sort((a, b) => Number(b["완료"]) - Number(a["완료"]));
         setAllRows(sorted);           // ✅ 도넛 계산은 전체 기준
         setData(sorted.slice(0, 10)); // ✅ 표시는 상위 10명만
 
         // ⏰ 업데이트 시간
         const now = new Date();
         const timeStr = now.toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
+          year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit",
         });
         setUpdatedAt(timeStr);
       } catch (e) {
@@ -95,7 +110,7 @@ function App() {
       }
     };
 
-    load(); // 최초 1회 로드
+    load();                     // 최초 1회 로드
     const id = setInterval(load, 60_000); // 60초마다 자동 갱신
     return () => clearInterval(id);
   }, [csvUrl]);
@@ -177,20 +192,22 @@ function App() {
               {/* 오전 미션 */}
               <div className="mission-block">
                 <div className="mission-title">
-                  <span className="black-square" /> 오전 미션
+                  <span className="black-square" /> {missionData.morningTitle || "오전 미션"}
                 </div>
                 <div className="mission-time">{missionData.morningTime}</div>
 
                 <div className="mission-stages">
                   <div className="mission-stage">
-                    <strong>1단계</strong>
-                    <div>그룹 : {missionData.morningStage1}</div>
+                    <strong>{missionData.morningStage1Label || "1단계"}</strong>
+                    <div>그룹 : {missionData.morningStage1Team}</div>
                     <div>개인 : {missionData.morningStage1Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.morningStage1Reward)}</div>
                   </div>
                   <div className="mission-stage">
-                    <strong>2단계</strong>
-                    <div>그룹 : {missionData.morningStage2}</div>
+                    <strong>{missionData.morningStage2Label || "2단계"}</strong>
+                    <div>그룹 : {missionData.morningStage2Team}</div>
                     <div>개인 : {missionData.morningStage2Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.morningStage2Reward)}</div>
                   </div>
                 </div>
               </div>
@@ -198,20 +215,22 @@ function App() {
               {/* 오후 미션 */}
               <div className="mission-block">
                 <div className="mission-title">
-                  <span className="black-square" /> 오후 미션
+                  <span className="black-square" /> {missionData.afternoonTitle || "오후 미션"}
                 </div>
                 <div className="mission-time">{missionData.afternoonTime}</div>
 
                 <div className="mission-stages">
                   <div className="mission-stage">
-                    <strong>1단계</strong>
-                    <div>그룹 : {missionData.afternoonStage1}</div>
+                    <strong>{missionData.afternoonStage1Label || "1단계"}</strong>
+                    <div>그룹 : {missionData.afternoonStage1Team}</div>
                     <div>개인 : {missionData.afternoonStage1Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.afternoonStage1Reward)}</div>
                   </div>
                   <div className="mission-stage">
-                    <strong>2단계</strong>
-                    <div>그룹 : {missionData.afternoonStage2}</div>
+                    <strong>{missionData.afternoonStage2Label || "2단계"}</strong>
+                    <div>그룹 : {missionData.afternoonStage2Team}</div>
                     <div>개인 : {missionData.afternoonStage2Personal}</div>
+                    <div>보상 : {fmtCurrency(missionData.afternoonStage2Reward)}</div>
                   </div>
                 </div>
               </div>
