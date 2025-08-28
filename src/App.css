@@ -489,3 +489,29 @@ table.leaderboard th, table.leaderboard td{
   .goal-box{ padding: 6px 0 8px; }
   .goals-grid{ gap: 8px; }
 }
+
+/* === 모바일에서 '오늘의 목표' 시간 표기 보이기 & 2줄 정렬 === */
+@media (max-width: 480px){
+  /* 1) 예전의 display: none 무시 */
+  .goal-doughnut .time-range{
+    display: block !important;
+    margin-top: 6px;
+    text-align: center;
+    font-size: 11px;      /* 필요시 조절 */
+    line-height: 1.2;
+  }
+
+  /* 2) 라벨/값을 세로(2줄)로 정렬 */
+  .goal-doughnut .time-range .tr{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-top: 2px;
+  }
+
+  /* 3) 라벨 뒤에 콜론 자동 추가 → "평일 :" / "주말 :" */
+  .goal-doughnut .time-range .tr-label::after{
+    content: " :";
+  }
+}
